@@ -46,7 +46,7 @@ public class ProductController {
         log.info("Product " + productDto + " created");
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public void update(@RequestBody ProductDto productDto) {
         productService.update(productDto);
         log.info("Product " + productDto + " updated");
