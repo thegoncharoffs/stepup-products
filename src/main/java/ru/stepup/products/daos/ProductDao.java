@@ -18,7 +18,7 @@ public class ProductDao extends BaseDao<Product, Long> {
     public static final String SELECT_PRODUCT_BY_ID = "select * from public.products u where u.id = ";
     public static final String UPDATE_PRODUCT_BY_ID = "update public.products u set account_number = %s, balance = %s, type = '%s' where u.id = %s";
     public static final String DELETE_PRODUCT_BY_ID = "delete from public.products u where u.id = ";
-    public static final String INSERT_PRODUCT = "insert into public.products (account_number, balance, type) values (%s, %s, '%s');";
+    public static final String INSERT_PRODUCT = "insert into public.products (account_number, balance, type) values (%s, %s, '%s')";
 
     public ProductDao(DataSource dataSource) {
         super(dataSource);
@@ -49,7 +49,7 @@ public class ProductDao extends BaseDao<Product, Long> {
     }
 
     @Override
-    public Optional<Product> getEntityById(Long id) {
+    public Optional<Product> getById(Long id) {
         PreparedStatement ps = getPrepareStatement(SELECT_PRODUCT_BY_ID + id);
         Product product = null;
         try {

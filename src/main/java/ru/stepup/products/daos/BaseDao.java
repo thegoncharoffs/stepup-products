@@ -21,7 +21,7 @@ public abstract class BaseDao<E, K> {
 
     public abstract List<E> getAll();
     public abstract boolean update(E entity);
-    public abstract Optional<E> getEntityById(K id);
+    public abstract Optional<E> getById(K id);
     public abstract boolean delete(K id);
     public abstract boolean create(E entity);
 

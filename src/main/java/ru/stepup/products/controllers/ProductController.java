@@ -1,39 +1,35 @@
 package ru.stepup.products.controllers;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.stepup.products.dtos.ProductDto;
 import ru.stepup.products.entities.Product;
 import ru.stepup.products.services.ProductService;
 
 import java.util.List;
 import java.util.Optional;
 
+
+@AllArgsConstructor
 @RestController
 @RequestMapping("/products")
 public class ProductController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class.getName());
-    @Autowired
-    ProductService productService;
 
+    private ProductService productService;
 
     @GetMapping
-    @ResponseBody
-    public ResponseEntity<?> getAll() {
+    public List<Product> getAll() {
         List<Product> result = productService.getAll();
-
-        if (result.isEmpty()) {
-            logger.info("Products are empty");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-
         logger.info("Products " + result.toString());
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return result;
     }
 
     @GetMapping("/{id}")
@@ -50,16 +46,15 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody Product product) {
-        productService.create(product);
-        logger.info("Product " + product.toString() + " created");
+    public void create(@RequestBody ProductDto productDto) {
+        productService.create(productDto);
+        logger.info("Product " + productDto + " created");
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id, @RequestBody Product product) {
-        product.setId(id);
-        productService.update(product);
-        logger.info("Product " + product.toString() + " updated");
+    public void update(@RequestBody ProductDto productDto) {
+        productService.update(productDto);
+        logger.info("Product " + productDto + " updated");
     }
 
     @DeleteMapping("/{id}")

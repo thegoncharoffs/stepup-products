@@ -1,14 +1,12 @@
-package ru.stepup.products.entities;
+package ru.stepup.products.dtos;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import ru.stepup.products.enums.ProductType;
 
-@Data
-@Builder
+@Getter
 @AllArgsConstructor
-public class Product {
+public class ProductDto {
     private Long id;
 
     private Long accountNumber;
