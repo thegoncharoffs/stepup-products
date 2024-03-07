@@ -22,10 +22,10 @@ public abstract class BaseDao<E, K> {
     }
 
     public abstract List<E> getAll();
-    public abstract boolean update(E entity);
+    public abstract void update(E entity);
     public abstract Optional<E> getById(K id);
-    public abstract boolean delete(K id);
-    public abstract boolean create(E entity);
+    public abstract void delete(K id);
+    public abstract void create(E entity);
 
     // Получение экземпляра PrepareStatement
     public PreparedStatement getPrepareStatement(String sql) {

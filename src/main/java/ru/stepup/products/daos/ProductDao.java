@@ -73,7 +73,7 @@ public class ProductDao extends BaseDao<ProductEntity, Long> {
     }
 
     @Override
-    public boolean update(ProductEntity productEntity) {
+    public void update(ProductEntity productEntity) {
         PreparedStatement ps = getPrepareStatement(
                 String.format(
                         UPDATE_PRODUCT_BY_ID,
@@ -87,32 +87,25 @@ public class ProductDao extends BaseDao<ProductEntity, Long> {
             ps.executeUpdate();
         } catch (SQLException e) {
             log.error("update error ", e);
-            return false;
         } finally {
             closePrepareStatement(ps);
         }
-
-        return true;
     }
 
     @Override
-    public boolean delete(Long id) {
+    public void delete(Long id) {
         PreparedStatement ps = getPrepareStatement(DELETE_PRODUCT_BY_ID + id);
-
         try {
             ps.executeUpdate();
         } catch (SQLException e) {
             log.error("delete error ", e);
-            return false;
         } finally {
             closePrepareStatement(ps);
         }
-
-        return true;
     }
 
     @Override
-    public boolean create(ProductEntity productEntity) {
+    public void create(ProductEntity productEntity) {
         PreparedStatement ps = getPrepareStatement(
                 String.format(
                         INSERT_PRODUCT,
@@ -126,11 +119,8 @@ public class ProductDao extends BaseDao<ProductEntity, Long> {
             ps.executeUpdate();
         } catch (SQLException e) {
             log.error("create error ", e);
-            return false;
         } finally {
             closePrepareStatement(ps);
         }
-
-        return true;
     }
 }

@@ -26,15 +26,15 @@ public class ProductService {
         return productEntity.map(ProductMapper::entityToDto);
     }
 
-    public boolean update(ProductDto productDto) {
-        return productDao.update(ProductMapper.dtoToEntity(productDto));
+    public void update(ProductDto productDto) {
+        productDao.update(ProductMapper.dtoToEntity(productDto));
     }
 
-    public boolean delete(Long id) {
-        return productDao.delete(id);
+    public void delete(Long id) {
+        productDao.delete(id);
     }
 
-    public boolean create(ProductDto productDto) {
-        return productDao.create(ProductMapper.dtoToEntity(productDto));
+    public void create(ProductDto productDto) {
+        productDao.create(ProductMapper.dtoToEntity(productDto));
     }
 }
