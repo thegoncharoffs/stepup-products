@@ -1,5 +1,6 @@
 package ru.stepup.products.daos;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.stepup.products.configurations.DataSource;
 
 import java.sql.Connection;
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 public abstract class BaseDao<E, K> {
     private final Connection connection;
 
@@ -31,7 +33,7 @@ public abstract class BaseDao<E, K> {
         try {
             ps = connection.prepareStatement(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("sql exception", e);
         }
 
         return ps;
@@ -43,7 +45,7 @@ public abstract class BaseDao<E, K> {
             try {
                 ps.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("sql exception", e);
             }
         }
     }
