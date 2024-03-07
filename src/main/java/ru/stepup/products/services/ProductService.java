@@ -9,6 +9,7 @@ import ru.stepup.products.mappers.ProductMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -16,12 +17,13 @@ public class ProductService {
 
     private ProductDao productDao;
 
-    public List<ProductEntity> getAll() {
-        return productDao.getAll();
+    public List<ProductDto> getAll() {
+        return productDao.getAll().stream().map(ProductMapper::entityToDto).collect(Collectors.toList());
     }
 
-    public Optional<ProductEntity> getById(Long id) {
-        return productDao.getById(id);
+    public Optional<ProductDto> getById(Long id) {
+        Optional<ProductEntity> productEntity = productDao.getById(id);
+        return productEntity.map(ProductMapper::entityToDto);
     }
 
     public boolean update(ProductDto productDto) {

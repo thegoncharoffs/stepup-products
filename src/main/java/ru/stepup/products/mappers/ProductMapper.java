@@ -12,4 +12,13 @@ public class ProductMapper {
                 .type(productDto.getType())
                 .build();
     }
+
+    public static ProductDto entityToDto(ProductEntity productEntity) {
+        return ProductDto.builder()
+                .id(productEntity.getId())
+                .accountNumber(productEntity.getAccountNumber())
+                .balance(productEntity.getBalance())
+                .type(productEntity.getType())
+                .build();
+    }
 }

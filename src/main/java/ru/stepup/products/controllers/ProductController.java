@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.stepup.products.dtos.ProductDto;
-import ru.stepup.products.entities.ProductEntity;
 import ru.stepup.products.services.ProductService;
 
 import java.util.List;
@@ -21,15 +20,15 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public List<ProductEntity> getAll() {
-        List<ProductEntity> result = productService.getAll();
+    public List<ProductDto> getAll() {
+        List<ProductDto> result = productService.getAll();
         log.info("Products " + result.toString());
         return result;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable Long id) {
-        Optional<ProductEntity> product = productService.getById(id);
+        Optional<ProductDto> product = productService.getById(id);
 
         if (product.isEmpty()) {
             log.info("Product whith id=" + id + " doesn't exist");
