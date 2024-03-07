@@ -1,8 +1,9 @@
 package ru.stepup.products.daos;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.stepup.products.configurations.DataSource;
-import ru.stepup.products.entities.Product;
+import ru.stepup.products.entities.ProductEntity;
 import ru.stepup.products.enums.ProductType;
 
 import java.sql.PreparedStatement;
@@ -13,7 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class ProductDao extends BaseDao<Product, Long> {
+@Slf4j
+public class ProductDao extends BaseDao<ProductEntity, Long> {
     public static final String SELECT_ALL_PRODUCTS = "select * from public.products";
     public static final String SELECT_PRODUCT_BY_ID = "select * from public.products u where u.id = ";
     public static final String UPDATE_PRODUCT_BY_ID = "update public.products u set account_number = %s, balance = %s, type = '%s' where u.id = %s";
@@ -25,13 +27,13 @@ public class ProductDao extends BaseDao<Product, Long> {
     }
 
     @Override
-    public List<Product> getAll() {
-        List<Product> lst = new LinkedList<>();
+    public List<ProductEntity> getAll() {
+        List<ProductEntity> lst = new LinkedList<>();
         PreparedStatement ps = getPrepareStatement(SELECT_ALL_PRODUCTS);
         try {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Product product = new Product(
+                ProductEntity product = new ProductEntity(
                         rs.getLong("id"),
                         rs.getLong("account_number"),
                         rs.getInt("balance"),
@@ -40,7 +42,7 @@ public class ProductDao extends BaseDao<Product, Long> {
                 lst.add(product);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("getAll error ", e);
         } finally {
             closePrepareStatement(ps);
         }
@@ -49,42 +51,42 @@ public class ProductDao extends BaseDao<Product, Long> {
     }
 
     @Override
-    public Optional<Product> getById(Long id) {
+    public Optional<ProductEntity> getById(Long id) {
         PreparedStatement ps = getPrepareStatement(SELECT_PRODUCT_BY_ID + id);
-        Product product = null;
+        ProductEntity productEntity = null;
         try {
             ResultSet rs = ps.executeQuery();
             rs.next();
-            product = new Product(
+            productEntity = new ProductEntity(
                     rs.getLong("id"),
                     rs.getLong("account_number"),
                     rs.getInt("balance"),
                     ProductType.valueOf(rs.getString("type").toUpperCase())
             );
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("getById error ", e);
         } finally {
             closePrepareStatement(ps);
         }
 
-        return Optional.ofNullable(product);
+        return Optional.ofNullable(productEntity);
     }
 
     @Override
-    public boolean update(Product product) {
+    public boolean update(ProductEntity productEntity) {
         PreparedStatement ps = getPrepareStatement(
                 String.format(
                         UPDATE_PRODUCT_BY_ID,
-                        product.getAccountNumber(),
-                        product.getBalance(),
-                        product.getType().getType(),
-                        product.getId()
+                        productEntity.getAccountNumber(),
+                        productEntity.getBalance(),
+                        productEntity.getType().getType(),
+                        productEntity.getId()
                 )
         );
         try {
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("update error ", e);
             return false;
         } finally {
             closePrepareStatement(ps);
@@ -100,7 +102,7 @@ public class ProductDao extends BaseDao<Product, Long> {
         try {
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("delete error ", e);
             return false;
         } finally {
             closePrepareStatement(ps);
@@ -110,20 +112,20 @@ public class ProductDao extends BaseDao<Product, Long> {
     }
 
     @Override
-    public boolean create(Product product) {
+    public boolean create(ProductEntity productEntity) {
         PreparedStatement ps = getPrepareStatement(
                 String.format(
                         INSERT_PRODUCT,
-                        product.getAccountNumber(),
-                        product.getBalance(),
-                        product.getType().getType()
+                        productEntity.getAccountNumber(),
+                        productEntity.getBalance(),
+                        productEntity.getType().getType()
                 )
         );
 
         try {
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("create error ", e);
             return false;
         } finally {
             closePrepareStatement(ps);

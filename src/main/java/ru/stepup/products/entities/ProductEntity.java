@@ -8,7 +8,7 @@ import ru.stepup.products.enums.ProductType;
 @Data
 @Builder
 @AllArgsConstructor
-public class Product {
+public class ProductEntity {
     private Long id;
 
     private Long accountNumber;

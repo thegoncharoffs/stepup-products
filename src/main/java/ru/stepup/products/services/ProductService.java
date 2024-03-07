@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.stepup.products.daos.ProductDao;
 import ru.stepup.products.dtos.ProductDto;
-import ru.stepup.products.entities.Product;
+import ru.stepup.products.entities.ProductEntity;
+import ru.stepup.products.mappers.ProductMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,16 +16,16 @@ public class ProductService {
 
     private ProductDao productDao;
 
-    public List<Product> getAll() {
+    public List<ProductEntity> getAll() {
         return productDao.getAll();
     }
 
-    public Optional<Product> getById(Long id) {
+    public Optional<ProductEntity> getById(Long id) {
         return productDao.getById(id);
     }
 
     public boolean update(ProductDto productDto) {
-        return productDao.update(toProduct(productDto));
+        return productDao.update(ProductMapper.dtoToEntity(productDto));
     }
 
     public boolean delete(Long id) {
@@ -32,15 +33,6 @@ public class ProductService {
     }
 
     public boolean create(ProductDto productDto) {
-        return productDao.create(toProduct(productDto));
-    }
-
-    private static Product toProduct(ProductDto productDto) {
-        return Product.builder()
-                .id(productDto.getId())
-                .accountNumber(productDto.getAccountNumber())
-                .balance(productDto.getBalance())
-                .type(productDto.getType())
-                .build();
+        return productDao.create(ProductMapper.dtoToEntity(productDto));
     }
 }
