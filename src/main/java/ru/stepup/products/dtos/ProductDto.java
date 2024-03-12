@@ -13,7 +13,7 @@ public class ProductDto {
 
     private Long accountNumber;
 
-    private int balance;
+    private Long balance;
 
     private ProductType type;
 }
