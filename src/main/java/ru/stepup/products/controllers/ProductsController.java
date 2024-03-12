@@ -3,57 +3,49 @@ package ru.stepup.products.controllers;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.stepup.products.dtos.ProductDto;
-import ru.stepup.products.services.ProductService;
+import ru.stepup.products.exceptions.ResourceNotFoundException;
+import ru.stepup.products.services.ProductsService;
 
 import java.util.List;
-import java.util.Optional;
-
 
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("/products")
-public class ProductController {
-    private ProductService productService;
+@RequestMapping("/api/v1/products")
+public class ProductsController {
+    private final ProductsService productsService;
 
     @GetMapping
     public List<ProductDto> getAll() {
-        List<ProductDto> result = productService.getAll();
-        log.info("Products " + result.toString());
-        return result;
+        List<ProductDto> result = productsService.findAll();
+        log.info("Products all " + result.toString());
+        return productsService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> get(@PathVariable Long id) {
-        Optional<ProductDto> product = productService.getById(id);
-
-        if (product.isEmpty()) {
-            log.info("Product whith id=" + id + " doesn't exist");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(product.get(), HttpStatus.OK);
+    public ProductDto findById(@PathVariable Long id) {
+        log.info("Product find by id " + id);
+        return productsService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody ProductDto productDto) {
-        productService.create(productDto);
+        productsService.create(productDto);
         log.info("Product " + productDto + " created");
     }
 
     @PutMapping
     public void update(@RequestBody ProductDto productDto) {
-        productService.update(productDto);
+        productsService.update(productDto);
         log.info("Product " + productDto + " updated");
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        productService.delete(id);
+        productsService.deleteById(id);
         log.info("Product with id" + id + " deleted");
     }
 }
